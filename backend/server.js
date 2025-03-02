@@ -1,24 +1,27 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const {chats} = require("./data");
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const dotenv = require('dotenv');
 
 dotenv.config();
 
-
 const app = express();
-const PORT = process.env.PORT || 5001; 
 
-app.get("/", (req, res) => {
-    res.send("Server started !!");
+// Middleware
+app.use(cors());
+app.use(express.json());
+
+// Connect to MongoDB
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch(err => console.error(err));
+
+// Routes
+const authRoutes = require('./routes/auth');
+app.use('/api/auth', authRoutes); 
+
+// Server
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
-
-app.get("/api/chats" , (req,res) => {
-    res.send(chats);
-});
-
-app.get("/api/chat/:id", (req,res) => {
-    const singleChat = chats.find((c) => c._id === req.params.id);
-    res.send(singleChat);
-})
-
-app.listen(PORT, console.log(`Server started on port ${PORT}`));
