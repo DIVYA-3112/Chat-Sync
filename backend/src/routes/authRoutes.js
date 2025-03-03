@@ -1,16 +1,14 @@
+// express setup
 const express = require("express");
 const router = express.Router();
 
-router.post("/login", (req, res) => {
-  res.send("Login");
-});
+// importing auth routes controllers
+const { signup, login, logout } = require("../controllers/authController");
 
-router.post("/logout", (req, res) => {
-  res.send("Logout");
-});
+// auth routes
+router.post("/signup", signup);
+router.post("/login", login);
+router.get("/logout", logout);
 
-router.get("/signup", (req, res) => {
-  res.send("Signup");
-});
-
+// exporting auth routes
 module.exports = router;
