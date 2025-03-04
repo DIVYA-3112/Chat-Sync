@@ -11,7 +11,7 @@ app.use(express.json());
 
 // importing dependencies
 const authRoutes = require('./routes/authRoutes');
-const connect = require('./db');
+const connect = require('./config/db');
 
 // importing constants
 const PORT = process.env.PORT;
