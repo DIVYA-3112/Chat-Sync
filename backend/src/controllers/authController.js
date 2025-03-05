@@ -100,7 +100,14 @@ const login = async (req, res) => {
 };
 
 const logout = (req, res) => {
-  res.send("Logout route");
+  try {
+    res.clearCookie("token");
+    return res.status(200).json({ message: "User logged out" });
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "error in logout controller" });
+  }
 };
 
 // exporting auth routes controllers
