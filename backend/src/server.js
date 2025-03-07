@@ -11,8 +11,10 @@ dotenv.config();
 app.use(express.json());
 app.use(cookieParser());
 
-// importing dependencies
+// importing routes
 const authRoutes = require('./routes/authRoutes');
+const messageRoutes = require('./routes/messageRoutes');
+
 const connect = require('./config/db');
 
 // importing constants
@@ -23,5 +25,8 @@ connect();
 
 // authRoutes
 app.use('/api/auth', authRoutes);
+
+// messageRoutes
+app.use('/api/message', messageRoutes)
 
 app.listen(PORT, () => {console.log(`Server is running on port ${PORT}`)});
