@@ -20,7 +20,7 @@ bcrypt.setRandomFallback((len) => {
 
 const signup = async (req, res) => {
   const { fullname, email, password } = req.body;
-  console.log(req.body);
+  console.log(req.body); // Log the request body
 
   try {
     if (!password || !email || !fullname) {

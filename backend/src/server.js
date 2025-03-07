@@ -1,6 +1,7 @@
 // installing express
 const express = require('express');
 const app = express();
+const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
 // dotenv configuration
@@ -10,6 +11,13 @@ dotenv.config();
 // middleware
 app.use(express.json());
 app.use(cookieParser());
+
+// Configure CORS
+const corsOptions = {
+    origin: 'http://localhost:5173', // Allow only this origin
+    credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+  };
+  app.use(cors(corsOptions));
 
 // importing routes
 const authRoutes = require('./routes/authRoutes');

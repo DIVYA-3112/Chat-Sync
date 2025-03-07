@@ -13,7 +13,7 @@ router.get("/logout", logout);
 
 router.put("/updateProfile", protectRoute, updateProfile);
 
-router.get("/checkAuth",protectRoute, checkAuth);
+router.get("/check",protectRoute, checkAuth);
 
 // exporting auth routes
 module.exports = router;
