@@ -1,6 +1,7 @@
 // installing express
 const express = require('express');
 const app = express();
+const cookieParser = require('cookie-parser');
 
 // dotenv configuration
 const dotenv = require('dotenv');
@@ -8,6 +9,7 @@ dotenv.config();
 
 // middleware
 app.use(express.json());
+app.use(cookieParser());
 
 // importing dependencies
 const authRoutes = require('./routes/authRoutes');

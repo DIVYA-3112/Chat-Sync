@@ -6,14 +6,15 @@ const User = require("../models/userModel");
 const bcrypt = require("bcryptjs");
 const token = require("../config/utils");
 const generateToken = require("../config/utils");
+const cloudinary = require("../config/cloudinary");
 
 app.use(express.json());
 
-// // Set random fallback for bcrypt
-// bcrypt.setRandomFallback((len) => {
-//   const buf = new Uint8Array(len);
-//   return buf.map(() => Math.floor(Math.random() * 256));
-// });
+// Set random fallback for bcrypt
+bcrypt.setRandomFallback((len) => {
+  const buf = new Uint8Array(len);
+  return buf.map(() => Math.floor(Math.random() * 256));
+});
 
 // auth routes controllers
 
@@ -103,10 +104,41 @@ const logout = (req, res) => {
   try {
     res.clearCookie("token");
     return res.status(200).json({ message: "User logged out" });
-  }
-  catch (error) {
+  } catch (error) {
     console.error(error);
     res.status(500).json({ error: "error in logout controller" });
+  }
+};
+
+const updateProfile = async (req, res) => {
+  const { profilePic } = req.body;
+  console.log(profilePic);
+  try {
+    const userId = req.user._id;
+    if (!profilePic) {
+      return res.status(400).json({ error: "Please fill all the fields" });
+    }
+    const uploadResponse = await cloudinary.uploader.upload(profilePic, {
+      upload_preset: "chat-sync",
+    });
+    const user = await User.findByIdAndUpdate(
+      userId,
+      { profilePic: uploadResponse.secure_url },
+      { new: true }
+    );
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "error in updateProfile controller" });
+  }
+};
+
+const checkAuth = (req, res) => {
+  try {
+    const user = req.user;
+    return res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "error in checkAuth controller" });
   }
 };
 
@@ -115,4 +147,6 @@ module.exports = {
   signup,
   login,
   logout,
+  updateProfile,
+  checkAuth
 };
